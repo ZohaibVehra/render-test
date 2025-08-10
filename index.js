@@ -33,9 +33,6 @@ const generateID = () => {
     return String(maxId + 1)
 }
 
-app.get('/', (request, response) => {
-  response.send('<h1>Hello Dawg!</h1>')
-})
 
 app.get('/api/notes', (request, response) => {
   response.json(notes)
@@ -76,6 +73,10 @@ app.post('/api/notes', (request, response) => {
     response.json(note)
 
 })
+
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
