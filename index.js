@@ -8,6 +8,7 @@ app.use(express.json())
 app.use(cors({
   origin: 'http://localhost:5173'
 }));
+app.use(express.static('dist'))
 let notes = [
     {
     id: "1",
@@ -76,6 +77,25 @@ app.post('/api/notes', (request, response) => {
 
 app.get('/', (req, res) => {
   res.send('Server is running');
+});
+
+app.put('/api/notes/:id', (req, res) => {
+  const id = req.params.id;
+  const { content, important } = req.body;
+
+  const noteIndex = notes.findIndex(n => n.id === id);
+  if (noteIndex === -1) {
+    return res.status(404).json({ error: 'note not found' });
+  }
+
+  const updatedNote = {
+    ...notes[noteIndex],
+    content: content !== undefined ? content : notes[noteIndex].content,
+    important: important !== undefined ? important : notes[noteIndex].important
+  };
+
+  notes[noteIndex] = updatedNote;
+  res.json(updatedNote);
 });
 
 const PORT = process.env.PORT || 3001
