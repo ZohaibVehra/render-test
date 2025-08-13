@@ -99,6 +99,23 @@ app.put('/api/notes/:id', (req, res) => {
 });
 
 const PORT = process.env.PORT
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+app.listen(PORT, async () => {
+  console.log(`Server running on port ${PORT}`);
+
+  
+  if (process.env.MONGODB_URI) {
+    console.log(process.env.MONGODB_URI);
+  } else {
+    console.log('MONGODB_URI is NOT set');
+  }
+
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+
+  // Test DB connection & count notes
+  try {
+    const count = await Note.countDocuments({});
+    console.log(`Connected DB has ${count} notes`);
+  } catch (err) {
+    console.error('Error querying DB:', err.message);
+  }
+});
